@@ -1,0 +1,11 @@
+title: vislee
+email: 
+description: > 
+  vislee
+baseurl: ""
+url: "https://vislee.github.io"
+github_username: vislee
+
+markdown: redcarpet
+
+paginate: 8
