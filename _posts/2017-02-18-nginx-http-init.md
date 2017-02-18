@@ -106,27 +106,29 @@ struct ngx_cycle_s {
 核心模块有如下几个，我们重点只关心http模块，别的模块也涉及到只会简单介绍。
 
 + NGX\_CORE\_MODULE：
- - ngx_core_module
- - ngx_http_module
- - ngx_events_module
- - ngx_errlog_module
+ - ngx\_core\_module
+ - ngx\_http\_module
+ - ngx\_events\_module
+ - ngx\_errlog\_module
 
 所有的模块基本都是先创建保存配置的结构体，然后解析配置文件，最后初始化配置。只不过有的模块简单有的复杂。而http模块是目前为止最复杂的模块。
-核心模块也不例外，首先为所有核心模块创建保存配置的结构体并把指针保存到cycle->conf_ctx数组中，由上图可知，核心模块的`ctx`是 `ngx_core_module_t` 类型，该类型有一个 `ngx_core_module_create_conf` 函数指针，该函数就是用来创建对应模块配置结构体的。
+核心模块也不例外，首先为所有核心模块创建保存配置的结构体并把指针保存到cycle->conf_ctx数组中，由上图可知，核心模块的`ctx`是 `ngx_core_module_t` 类型，
+该类型有一个 `ngx_core_module_create_conf` 函数指针，该函数就是用来创建对应模块配置结构体的。
 
-创建好结构体有保存的地方了，接着会解析配置文件，框架核心代码只关心核心模块的配置解析。主要函数是 `ngx_conf_handler` ，该函数会遍历所有模块的commands指针数组(cycle->modules[i]->commands[j])根据配置key寻找处理函数。下面会分模块说明。
+创建好结构体有保存的地方了，接着会解析配置文件，框架核心代码只关心核心模块的配置解析。主要函数是 `ngx_conf_handler` ,
+该函数会遍历所有模块的commands指针数组( `cycle->modules[i]->commands[j]` )根据配置key寻找处理函数。下面会分模块说明。
 
 
-#### ngx_core_module
+#### ngx\_core\_module
 
 核心相关的配置，对应nginx.c文件 `ngx_core_commands` 指针数组。
 
-#### ngx_events_module
+#### ngx\_events\_module
 
 event模块相关配置，对应ngx_event.c文件 `ngx_events_commands` 指针数组。
 解析event{}，调用 `ngx_events_block()` ，管理 `NGX_EVENT_MODULE` 模块。
 
-#### ngx_http_module
+#### ngx\_http\_module
 
 http模块相关配置，对应ngx_http.c文件 `ngx_http_commands` 指针数组。
 因为该模块管理http类型( `NGX_HTTP_MODULE` )模块，需要解析http块（配置文件中的http{}），并没有直接的配置需要保存，因此 `ngx_core_module_create_conf` 指针为空。
