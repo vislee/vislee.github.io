@@ -8,4 +8,3 @@ permalink: /about/
 
 联系方式：
 [weibo](http://weibo.com/wenqiangli)
-[email](lazyvislee@gmail.com)
