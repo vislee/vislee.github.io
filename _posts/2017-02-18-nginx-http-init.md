@@ -23,7 +23,7 @@ ngx\_module\_t 结构体：
 
 ![nginx-module]({{ site.url }}/assets/nginx_module_170218.png)
 
-不同的模块type取值不同，*ctx的类型不同。*cmd是ngx\_command\_t类型的数组。
+不同的模块type取值不同，\*ctx的类型不同。\*cmd是ngx\_command\_t类型的数组。
 
 
 
@@ -82,8 +82,8 @@ struct ngx_cycle_s {
  - ngx\_errlog\_module
 
 所有的模块基本都是先创建保存配置的结构体，然后解析配置文件，最后初始化配置。只不过有的模块简单有的复杂。而http模块是目前为止最复杂的模块。
-核心模块也不例外，首先为所有核心模块创建保存配置的结构体并把指针保存到cycle->conf_ctx数组中，由上图可知，核心模块的ctx是ngx_core_module_t类型，
-该类型有一个 ngx_core_module_create_conf 函数指针，该函数就是用来创建对应模块配置结构体的。
+核心模块也不例外，首先为所有核心模块创建保存配置的结构体并把指针保存到cycle->conf\_ctx数组中，由上图可知，核心模块的ctx是ngx\_core\_module\_t类型，
+该类型有一个ngx\_core\_module\_create\_conf函数指针，该函数就是用来创建对应模块配置结构体的。
 
 创建好结构体有保存的地方了，接着会解析配置文件，框架核心代码只关心核心模块的配置解析。主要函数是ngx_conf_handler,
 该函数会遍历所有模块的commands指针数组(cycle->modules[i]->commands[j])根据配置key寻找处理函数。下面会分模块说明。
@@ -95,7 +95,7 @@ struct ngx_cycle_s {
 
 #### ngx\_events\_module
 
-event模块相关配置，对应ngx\_event.c文件 ngx\_events\_commands` 指针数组。
+event模块相关配置，对应ngx\_event.c文件 ngx\_events\_commands指针数组。
 解析event{}，调用ngx\_events\_block()，管理 NGX\_EVENT\_MODULE模块。
 
 #### ngx\_http\_module
@@ -123,7 +123,7 @@ http模块对应的处理函数为ngx\_http\_block，我们重点看该函数。
 
 由图可知ngx\_http\_core\_loc\_conf\_s结构有三个实例ngx\_http\_core\_srv\_conf\_t有两个实例，正是为解决配置文件中同一个配置可以同时配置在不同的配置块中(http块、server块、location块)。
 
-三个实例都有相同的配置，那么到底那个配置会作用于http请求呢？http模块的ctx(类型：ngx\_http\_module\_t)有两个函数ngx\_http\_core\_merge\_srv\_conf和ngx\_http\_core\_merge\_loc\_conf分别用来合并ngx\_http\_core\_srv\_conf\_t的两个实例和 `ngx\_http\_core\_loc\_conf\_s的三个实例，至于如何合并，到底是上一级结构覆盖本级结构的配置还是相加什么的。。。完全由这两个函数自己决定（一般情况都是当前配置为空就用上一级配置覆盖否则不处理），每个http模块都有自己的合并处理函数，nginx框架会统一调用。
+三个实例都有相同的配置，那么到底那个配置会作用于http请求呢？http模块的ctx(类型：ngx\_http\_module\_t)有两个函数ngx\_http\_core\_merge\_srv\_conf和ngx\_http\_core\_merge\_loc\_conf分别用来合并ngx\_http\_core\_srv\_conf\_t的两个实例和ngx\_http\_core\_loc\_conf\_s的三个实例，至于如何合并，到底是上一级结构覆盖本级结构的配置还是相加什么的。。。完全由这两个函数自己决定（一般情况都是当前配置为空就用上一级配置覆盖否则不处理），每个http模块都有自己的合并处理函数，nginx框架会统一调用。
 
 合并完配置文件后，会完成以下几个操作：
 
