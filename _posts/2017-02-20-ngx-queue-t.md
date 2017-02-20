@@ -21,7 +21,7 @@ struct ngx_queue_s {
 ```c
 // 宏，用来初始化一个节点
 ngx_queue_init(ngx_queue_t q);
-// 宏，判断一个是否为空链表
+// 宏，判断一个链表是否为空链表
 ngx_queue_empty(ngx_queue_t q);
 // 宏，在链表头部插入一个节点
 ngx_queue_insert_head(ngx_queue_t h, ngx_queue_t x);
@@ -33,7 +33,7 @@ ngx_queue_insert_tail(ngx_queue_t h, ngx_queue_t x);
 ngx_queue_head(ngx_queue_t h);
 // 宏，返回链表尾节点
 ngx_queue_last(ngx_queue_t h);
-// 宏，返回链表哨兵界点
+// 宏，返回链表哨兵节点
 ngx_queue_sentinel(ngx_queue_t h);
 // 宏，返回当前节点下一个节点
 ngx_queue_next(ngx_queue_t q);
@@ -58,8 +58,11 @@ void ngx_queue_sort(ngx_queue_t *queue,
 ```
 
 结构定义非常简单，只定义了两个指针。成员函数还是比较多的很多都是宏定义。
+
 使用的时候直接把该结构体作为成员变量添加到目标结构体就可以了。这样设计灵活方便又节省内存。
+
 nginx中使用的时候常常会设置一个sentinel节点，该节点没有值。
+
 
 对应着代码实现画了个图帮助理解。如下：
 
@@ -67,3 +70,4 @@ nginx中使用的时候常常会设置一个sentinel节点，该节点没有值�
 
 ![ngx_queue_t_2]({{ site.url }}/assets/ngx_queue_t_2_170220.png)
 
+end
