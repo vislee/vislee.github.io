@@ -2,7 +2,7 @@
 layout: post
 title:  "nginx的location解析初始化和请求查找"
 date:   2017-02-21 14:29:03
-categories: update
+categories: nginx
 ---
 
 ### 简介

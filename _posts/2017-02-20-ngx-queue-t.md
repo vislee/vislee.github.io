@@ -2,7 +2,7 @@
 layout: post
 title:  "nginx 双链表设计与实现"
 date:   2017-02-20 12:33:21
-categories: update
+categories: nginx
 ---
 
 ngx\_queue\_t 是ngx为双链表设计的数据结构。在ngx代码中很多地方用到了该结构体。

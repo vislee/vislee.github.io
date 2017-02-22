@@ -2,7 +2,7 @@
 layout: post
 title:  "nginx http 模块初始化"
 date:   2017-02-18 12:29:12
-categories: update
+categories: nginx
 ---
 
 ### 简介
@@ -85,7 +85,7 @@ struct ngx_cycle_s {
 核心模块也不例外，首先为所有核心模块创建保存配置的结构体并把指针保存到cycle->conf\_ctx数组中，由上图可知，核心模块的ctx是ngx\_core\_module\_t类型，
 该类型有一个ngx\_core\_module\_create\_conf函数指针，该函数就是用来创建对应模块配置结构体的。
 
-创建好结构体有保存的地方了，接着会解析配置文件，框架核心代码只关心核心模块的配置解析。主要函数是ngx_conf_handler,
+创建好结构体有保存的地方了，接着会解析配置文件，框架核心代码只关心核心模块的配置解析。主要函数是ngx\_conf\_handler,
 该函数会遍历所有模块的commands指针数组(cycle->modules[i]->commands[j])根据配置key寻找处理函数。下面会分模块说明。
 
 
