@@ -105,11 +105,11 @@ http模块相关配置，对应ngx\_http.c文件ngx\_http\_commands指针数组�
 
 http模块对应的处理函数为ngx\_http\_block，我们重点看该函数。看该函数前先了解一下http的配置，http配置分为三层，最外层的是http{}中间是server{}最里层是location{}即(http{server{location{}}})，并且每一层都可以有相同的配置，例如client\_body\_buffer\_size配置，可以配置在http块下、server块下，location块下，也可以同时配置到这三个块下。因此导致配置结构体也错综复杂。
 
-先创建http{}对应的上下文ctx，类型为ngx\_http\_conf\_ctx\_t。该结构体为三个指针，分别指向了三个指针数组，数组的长度是NGX\_HTTP\_MODULE模块的个数。其中main\_conf 对应的数组存存了http块下配置结构体指针，srv\_conf指向的数组存储了server块下配置结构体指针，loc\_conf 指向的数组存储了location块下配置结构体指针。并且http模块下每一个配置块都将对应一个ngx\_http\_conf\_ctx\_t结构体，详细见下图。
+先创建http{}对应的上下文ctx，类型为ngx\_http\_conf\_ctx\_t。该结构体为三个指针，分别指向了三个指针数组，数组的长度是NGX\_HTTP\_MODULE模块的个数。其中main\_conf 对应的数组存存了http级别的配置结构体指针，srv\_conf指向的数组存储了server级别的配置结构体指针，loc\_conf 指向的数组存储了location级别的配置结构体指针。并且http模块下每一个配置块都将对应一个ngx\_http\_conf\_ctx\_t结构体，详细见下图。
 
 创建完http{}对应的配置结构体后，开始解析http级别的配置。而server{}也属于http级别的配置，所以会调用server对应的处理函数ngx\_http\_core\_server。其他配置解析请参照 ngx\_http\_core\_commands数组。
 
-上面说了每一个块都会对应一个ngx\_http\_conf\_ctx\_t，所以也会为server{}分配一个ctx，其中main\_conf指向http块下的配置，srv\_conf 新分配的指针数组存储了server块下配置结构体指针，loc\_conf 新分配的指针数组存储了location块下配置结构体指针。创建完server{}层级的结构体后开始解析server下的配置。而location{}也属于server级别的配置，所以会调用location的处理函数 ngx\_http\_core\_location。其他配置解析请参照ngx\_http\_core\_commands数组。
+上面说了每一个块（配置文件中{}）都会对应一个ngx\_http\_conf\_ctx\_t，所以也会为server{}分配一个ctx，其中main\_conf指向http块下的配置，srv\_conf 新分配的指针数组存储了server块下配置结构体指针，loc\_conf 新分配的指针数组存储了location块下配置结构体指针。创建完server{}层级的结构体后开始解析server下的配置。而location{}也属于server级别的配置，所以会调用location的处理函数 ngx\_http\_core\_location。其他配置解析请参照ngx\_http\_core\_commands数组。
 
 相应的ngx_http\_core\_location函数也会创建一个ngx\_http\_conf\_ctx\_t结构体，其中main\_conf指针指向server下的main\_conf也就是http下的main\_conf，srv\_conf指向server下的srv\_conf，loc\_conf会新建，新建的指针数组存储了location块下配置结构体指针。
 
